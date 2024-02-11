@@ -1,0 +1,12 @@
+{% extends 'main.html' %}
+{% block content %}
+
+{% for exercise in workout.exercises.all %}
+<h1>{{exercise}}</h1>
+<h2>{{exercise.load}}</h2>
+<h2>{{exercise.sets}}</h2>
+<h3>{{ forloop.counter }}</h3>
+
+{% endfor %}
+
+{% endblock %}

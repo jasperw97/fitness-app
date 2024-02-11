@@ -1,0 +1,140 @@
+{% extends 'main.html' %} {% block content %}
+
+<form action="" method="post" id="workout_form">
+  {% csrf_token %}
+  {% if workout %}
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="floatingInput" name="title" placeholder="Give your workout a cool title!" required value="{{workout.title}}">
+      <label for="floatingInput">Title</label>
+    </div>
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="floatingGoal" name="goal" placeholder="Give your workout a goal" list="goal_list" value="{{workout.goal}}">
+      <label for="floatingGoal">Goal</label>
+      <datalist id="goal_list">
+        <select id="goal_name" class="form-select">
+          {% for goal in goals %}
+          <option value="{{ goal.goal }}">{{ goal.goal }}</option>
+          {% endfor %}
+        </select>
+      </datalist>
+    </div>
+  <div id="form_contents" class="row g-1 g-md-3">
+  {% for workout_exercise in workout.exercises.all %}
+  
+    <div class="col-6 col-md-3 form-floating mb-3">
+      <input type="text" class="form-control" id="floatingExercise" name="exercise{{forloop.counter}}" placeholder="Exercise" list="exercise_list" value="{{workout_exercise}}">
+      <label for="floatingExercise">Exercise Name</label>
+      <datalist id="exercise_list">
+        <select id="exercise_name" class="form-select">
+          {% for exercise in exercises %}
+          <option value="{{exercise.name}}">{{exercise.name}}</option>
+          {% endfor %}
+        </select>
+      </datalist>
+      </div>
+    <div class="col-2 form-floating mb-3">
+      <input type="text" class="form-control" id="floatingSets" name="sets{{forloop.counter}}" placeholder="sets" value="{{workout_exercise.sets}}">
+      <label for="floatingSets" class="form-control-sm">Sets</label>
+    </div>
+    <div class="col-2 form-floating mb-3"><input type="text" class="form-control" id="floatingReps" name="reps{{forloop.counter}}" placeholder="reps" value="{{workout_exercise.reps}}">
+      <label for="floatingReps" class="form-control-sm">Reps</label></div>
+    <div class="col-2 form-floating mb-3"><input type="text" class="form-control" id="floatingLoad" name="load{{forloop.counter}}" placeholder="load" value="{{workout_exercise.load}}">
+      <label for="floatingLoad" class="form-control-sm">Load</label></div>
+    <div class="col-7 col-md-3 form-floating mb-3">
+      <textarea class="form-control" name="description{{forloop.counter}}" id="floatingDescription" placeholder="Description" style="height: 100px" value="{{workout_exercise.description}}"></textarea>
+      <label for="floatingDescription">Description</label>
+    </div>   
+  
+  
+    {% endfor %}
+  </div>
+    {% else %}
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="floatingTitle" name="title" placeholder="Give your workout a cool title!" required value="{{workout.title}}">
+      <label for="floatingTitle">Title</label>
+    </div>
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="floatingGoal" name="goal" placeholder="Give your workout a goal" list="goal_list" value="{{workout.goal}}">
+      <label for="floatingGoal">Goal</label>
+      <datalist id="goal_list">
+        <select id="goal_name" class="form-select">
+          {% for goal in goals %}
+          <option value="{{ goal.goal }}">{{ goal.goal }}</option>
+          {% endfor %}
+        </select>
+      </datalist>
+    </div>
+    
+  <div id="form_contents" class="row g-1 g-md-3">
+    <div class="col-6 col-md-3 form-floating mb-3">
+      <input type="text" class="form-control" id="floatingExercise" name="exercise1" placeholder="Exercise" list="exercise_list" value="{{workout_exercise}}">
+      <label for="floatingExercise">Exercise Name</label>
+      <datalist id="exercise_list">
+        <select id="exercise_name" class="form-select">
+          {% for exercise in exercises %}
+          <option value="{{exercise.name}}">{{exercise.name}}</option>
+          {% endfor %}
+        </select>
+      </datalist>
+      </div>
+    <div class="col-2 form-floating mb-3">
+      <input type="text" class="form-control" id="floatingSets" name="sets1" placeholder="sets" value="{{workout_exercise.sets}}">
+      <label for="floatingSets" class="form-control-sm">Sets</label>
+    </div>
+    <div class="col-2 form-floating mb-3"><input type="text" class="form-control" id="floatingReps" name="reps1" placeholder="reps" value="{{workout_exercise.reps}}">
+      <label for="floatingReps" class="form-control-sm">Reps</label></div>
+    <div class="col-2 form-floating mb-3"><input type="text" class="form-control" id="floatingLoad" name="load1" placeholder="load" value="{{workout_exercise.load}}">
+      <label for="floatingLoad" class="form-control-sm">Load</label></div>
+    <div class="col-7 col-md-3 form-floating mb-3">
+      <textarea class="form-control" name="description1" id="floatingDescription" placeholder="Description" style="height: 100px" value="{{workout_exercise.description}}"></textarea>
+      <label for="floatingDescription">Description</label>
+    </div>   
+  </div>
+    {% endif %}
+    
+  
+  <button onclick="addMoreField()" type="button" class="btn btn-warning">Add</button>
+
+  {% if page %}
+  <input type="submit" value="Create Workout" class="btn btn-success" />
+  {% else %}
+  <input type="submit" value="Update Workout" class="btn btn-success" />
+  {% endif %}
+</form>
+
+<script>
+  var counter = "{{ len }}";
+  counter = parseInt(counter);
+  function addMoreField() {
+    counter += 1;
+    html = '<div class="col-6 col-md-3 form-floating mb-3">\
+      <input type="text" class="form-control" id="floatingExercise" name="exercise'+counter+'" placeholder="Exercise" list="exercise_list" value="{{workout_exercise}}">\
+      <label for="floatingExercise">Exercise Name</label>\
+      <datalist id="exercise_list">\
+        <select id="exercise_name" class="form-select">\
+          {% for exercise in exercises %}\
+          <option value="{{exercise.name}}">{{exercise.name}}</option>\
+          {% endfor %}\
+        </select>\
+      </datalist>\
+      </div>\
+    <div class="col-2 form-floating mb-3">\
+      <input type="text" class="form-control" id="floatingSets" name="sets'+counter+'" placeholder="sets" value="{{workout_exercise.sets}}">\
+      <label for="floatingSets" class="form-control-sm">Sets</label>\
+    </div>\
+    <div class="col-2 form-floating mb-3"><input type="text" class="form-control" id="floatingReps" name="reps'+counter+'" placeholder="reps" value="{{workout_exercise.reps}}">\
+      <label for="floatingReps" class="form-control-sm">Reps</label></div>\
+    <div class="col-2 form-floating mb-3"><input type="text" class="form-control" id="floatingLoad" name="load'+counter+'" placeholder="load" value="{{workout_exercise.load}}">\
+      <label for="floatingLoad" class="form-control-sm">Load</label></div>\
+    <div class="col-7 col-md-3 form-floating mb-3">\
+      <textarea class="form-control" name="description'+counter+'" id="floatingDescription" placeholder="Description" style="height: 100px" value="{{workout_exercise.description}}"></textarea>\
+      <label for="floatingDescription">Description</label></div>';
+    var targetDiv = document.getElementById("form_contents");
+    var tempDiv = document.createElement("div");
+    tempDiv.className = "row g-1 g-md-3"
+    tempDiv.innerHTML = html;
+    targetDiv.appendChild(tempDiv);
+  }
+</script>
+
+{% endblock %}

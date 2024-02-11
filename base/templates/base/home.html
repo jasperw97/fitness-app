@@ -1,0 +1,21 @@
+{% extends 'main.html' %}
+{% block content %}
+
+
+<div class="row justify-content-center">
+    
+    <div class="col-12 col-md-6">
+        {% if request.user.is_authenticated %}
+        <a class="btn btn-success btn-lg rounded-0 mb-2" href="{% url 'base:create_workout' %}"> <i class="bi bi-plus-lg"></i> Create Workout</a>
+        {% if request.user.goal != None %}
+        <a class = "btn btn-lg text-white bg-secondary rounded-0 mb-2" href="{% url 'base:home' %}?goal={{request.user.goal}}">Recommend Workouts</a>
+        {% endif %}
+        {% endif %}
+        {% include 'base/feed.html' %}
+    </div>
+</div>
+
+<hr>
+
+
+{% endblock %}

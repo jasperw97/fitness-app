@@ -1,0 +1,33 @@
+{% for workout in workouts %}
+
+<div class="card text-start my-4">
+  <div class="card-header">Goal: {{workout.goal}}</div>
+  <div class="card-body">
+    <h5 class="card-title">{{workout}}</h5>
+    {% if workout.user == request.user %}
+    <a
+      class="btn btn btn-sm bg-danger-subtle"
+      href="{% url 'base:workout_delete' workout.pk %}"
+      ><i class="bi bi-trash"></i></a
+    >
+    <a
+      class="btn btn btn-sm bg-primary-subtle"
+      href="{% url 'base:workout_update' workout.pk %}"
+      ><i class="bi bi-pen"></i></a
+    >
+    {% endif %}
+    <div class="my-3">
+      {% for exercise in workout.exercises.all %}
+      <h6 class="card-text">{{exercise}}</h6>
+      <p class="card-text">{{exercise.sets}} x {{exercise.reps}}, Load: {{exercise.load}}kg</p>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="card-footer text-body-secondary">
+    <a href="{% url 'base:userprofile' workout.user.pk %}"
+      >@{{workout.user.username}}</a
+    >  {{workout.created|timesince}} ago
+  </div>
+</div>
+
+{% endfor %}
